@@ -1,62 +1,36 @@
-class Prodotto:
-    aliquota_iva = 0.22  # variabile di classe -- ovvero è la stessa per tutte le istanza che verranno create
+from ordini import Ordine, RigaOrdine, OrdineConSconto
+from prodotti import Prodotto, crea_prodotto_standard, ProdottoRecord
+from clienti import Cliente, ClienteRecord
 
-    def __init__(self, name: str, price: float, quantity: int, supplier = None):
+print("=======================================================")
 
-        self.name = name
-        self.price = price
-        self.quantity = quantity
-        self.supplier = supplier
+p1 = Prodotto("Ebook Reader", 120.0, 1, "AAA")
+p2 = crea_prodotto_standard("Tablet", 750)
 
-    def valore_netto(self):
-        return self.price * self.quantity
+print (p1)
+print (p2)
+print("=======================================================")
 
-    def valore_lordo(self):
-        netto = self.valore_netto()
-        lordo = netto * (1 + self.aliquota_iva)
-        return lordo
+c1 = Cliente("Mario Rossi", "mail@mail.com", "Gold")
 
-    # decoratore
-    @classmethod
-    def costruttore_con_quantità_uno(cls, name: str, price: float, supplier: str):
-        return cls(name, price,quantity=1, supplier= supplier)
+cliente1 = ClienteRecord("Mario Rossi", "mariorossi@example.com", "Gold")
+p1 = ProdottoRecord("Laptop", 1200.0)
+p2 = ProdottoRecord("Mouse", 20)
 
-    @classmethod
-    def applica_sconto(cls, prezzo, percentuale):
-        return prezzo*(1-percentuale)
+ordine = Ordine([RigaOrdine(p1,2), RigaOrdine(p2, 10)], cliente1)
+ordine_scontato = OrdineConSconto([RigaOrdine(p1,2), RigaOrdine(p2, 10)], cliente1, 0.1)
 
+print(ordine)
+print("Numero di righe nell'ordine: ", ordine.numero_righe())
+print("Totale netto: ", ordine.totale_netto())
+print("Totale lordo (IVA 22%): ", ordine.totale_lordo(0.22))
 
+print(ordine_scontato)
+print("Totale netto sconto: ", ordine_scontato.totale_netto())
+print("Totale lordo scontato: ", ordine_scontato.totale_lordo(0.22))
 
-myproduct1 = Prodotto("Laptop", 1200.0, 12, "ABC")
+print("-------------------------------------------------------------------")
 
-myproduct1 = Prodotto(name="Laptop", price=1200.0, quantity=12, supplier="ABC")
-print(f"Nome prodotto: {myproduct1.name}")
-print(f"Prezzo prodotto: {myproduct1.price}")
-
-print(f"Nome prodotto: {myproduct1.name}- prezzo : {myproduct1.price}")
-
-p3 = Prodotto.costruttore_con_quantità_uno(name = "Auricolari ", price= 200., supplier="ABC")
-print( f"prezzo scontato di myproduct 1  {Prodotto.applica_sconto(myproduct1.price, percentuale=0.15)}")
-
-myproduct2 = Prodotto(name="Mouse", price=10, quantity=25, supplier="CDE")
-print(f"Nome prodotto: {myproduct2.name}- prezzo : {myproduct2.price}")
-
-
-# Scrivere una classe Cliente che abbia i campi "nome","email","categoria"("Gold","Silver","Bronze")
-# vorremmo che questa calsse avesse un metodo che chiamiamo "descrizione"
-# che deve restituriee una stringa formattata ad esempio
-# Cliente Fulvio Bianchi (Gold) - email"
-
-class Cliente:
-
-    def __init__(self, name: str, email: str, categoria: str):
-        self.name = name
-        self.email = email
-        self.categoria = categoria
-
-    def descrizione(self):
-        return (f"Cliente {self.name} ({self.categoria}) - {self.email}")
-
-
-c1 = Cliente(name="Mario Bianchi", email="mario.bianchi@gmail.com", categoria="Gold")
-print(c1.descrizione())
+#Nel package gestionale, scriviamo un modulo fatture.py che contenga:
+# - una classe Fattura che contiene un Ordine, un numero_fattura e una data
+# - un metodo genera_fattura() che restituisce una stringa formattata con tutte le info della fattura
