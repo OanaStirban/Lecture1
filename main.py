@@ -1,6 +1,6 @@
-from ordini import Ordine, RigaOrdine, OrdineConSconto
-from prodotti import Prodotto, crea_prodotto_standard, ProdottoRecord
-from clienti import Cliente, ClienteRecord
+from vendite.ordini import Ordine, RigaOrdine, OrdineConSconto
+from gestionale.prodotti import Prodotto, crea_prodotto_standard, ProdottoRecord
+from gestionale.clienti import Cliente, ClienteRecord
 
 print("=======================================================")
 

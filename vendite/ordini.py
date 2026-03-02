@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from clienti import ClienteRecord
+from gestionale.clienti import ClienteRecord
 from prodotti import ProdottoRecord
 
 
